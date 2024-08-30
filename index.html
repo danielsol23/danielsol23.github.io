@@ -1,46 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cocina Chicano Restaurant</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Giphy Search Engine</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
+    <header>
+      Giphy Search Engine
+      <form id="search-form" name="search-form">
+        <input id="search-Input" type="text" placeholder="search"> <button type="submit" search="">Submit</button> 
+        <button class="btn btn-default" id="new"> Random </button>
+         <button type="submit" search="">Translate</button>
+
+      </form>
+    </header>
+    <div id="results"></div>
+  </div>
+  <script>
+    const searchForm = document.getElementById('search-form')
+    const searchInput= document.getElementById('search-Input')
+    const resultsEl = document.getElementById('results')
+
+    searchForm.addEventListener('submit',function(e){
+        e.preventDefault()
+        const q = searchInput.value
+        search(q)
+    })
     
-<div class="container">
+        
 
-<header>
-    Lalito 
-    - San Fransico
-</header>
-    
-<nav>
-    <a href="index.html">HOME</a>
-    <a href="#">MENU</a>
-    <a href="">POP UP SCHEDULE</a>
-    <a href="photoalbum.html">PHOTO ALBUM</a>
-    <a href="contact.html">CONTACT</a>
-
-
-</nav>
-
-<main>
-    <h1>Cocinero Chicano</h1>
-    <p>Speciality Mexican cuisine originating from LA to the Bay. With passion and admiration to my culture we design a food palate that will truly satisfy and exhibit the Mexican culture</p>
-   
-</main>
-
-<footer>
-   <p>Pop Ups Schedule subject to change</p> 
-    
-    <a href="https://www.instagram.com/lalito_bayarea/?locale=French&hl=am-et" target="_blank">FUTURE POP UP SCHEDULE</a>
+  function search(q) {  
 
     
+        const apikey = 'GsCPYVvpT9NhEwhhlq7L9MvztArq0HDp'
+        const path = `https://api.giphy.com/v1/gifs/search?api_key=${apikey}&q=${q}`
 
-</footer>
+        fetch(path) .then(function(res) { 
+            return res.json() 
+        
+        }).then(function (json){
+            console.log(json.data[0].images.fixed_width.url)
+         
+            let resultsHTML = ''
+            
+            json.data.forEach(function(obj) {
+                console.log(obj)
+                
+                const url = obj.images.fixed_width.url
+                const width = obj.images.fixed_width.width
+                const height = obj.images.fixed_width.height
+                const title = obj.title
+                resultsHTML += `<img 
+                src="${url}" 
+                width = "${width}" 
+                height = "${height}"
+                alt="${title}"
+                >`
+            })
+           
+            resultsEl.innerHTML = resultsHTML   
+        }).catch(function(err){
+            console.log(err.message)
+        })
+        
+        
 
-</div>
- 
+  }
+
+            
+        
+  </script>
 </body>
 </html>
